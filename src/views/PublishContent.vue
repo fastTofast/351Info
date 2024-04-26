@@ -19,7 +19,7 @@ const isFullScreenPreview = ref(false)
       <button class="mr-2" @click="isFullScreenPreview = !isFullScreenPreview">
         {{ isFullScreenPreview ? '关闭全屏预览' : '打开全屏预览' }}
       </button>
-      <button @click="isShowPreview = !isShowPreview">
+      <button v-if="!isFullScreenPreview" @click="isShowPreview = !isShowPreview">
         {{ isShowPreview ? '关闭实时预览' : '打开实时预览' }}
       </button>
     </div>
