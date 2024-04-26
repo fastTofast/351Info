@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { ref, shallowRef, type Component, defineAsyncComponent } from 'vue'
+import { ref, defineAsyncComponent } from 'vue'
 const FroalaEditorCom = defineAsyncComponent(() => import('@/components/FroalaEditorCom.vue'))
 import PreviewContent from '@/components/PreviewContent.vue'
-import { useRouter } from 'vue-router'
-const router = useRouter()
 const content = ref('')
 const config = {
   events: {
@@ -14,11 +12,6 @@ const config = {
 }
 const isShowPreview = ref(false)
 const isFullScreenPreview = ref(false)
-function preview() {
-  isShowPreview.value = false
-  isFullScreenPreview.value = true
-}
-function close() {}
 </script>
 <template>
   <div class="editor-content">
@@ -30,24 +23,22 @@ function close() {}
         {{ isShowPreview ? '关闭实时预览' : '打开实时预览' }}
       </button>
     </div>
-    <keep-alive>
-      <div class="publish-page flex">
-        <div v-if="!isFullScreenPreview" class="rich-editor-section flex-1 basis-1/2">
-          <FroalaEditorCom
-            :tag="'textarea'"
-            :config="config"
-            v-model:value="content"
-          ></FroalaEditorCom>
-        </div>
-        <div
-          v-if="isShowPreview || isFullScreenPreview"
-          class="preview-section flex-1 basis-1/2 border-solid border-gray-300 border rounded"
-          :class="[!isFullScreenPreview ? 'ml-4' : '']"
-        >
-          <PreviewContent :content="content" @close="close"></PreviewContent>
-        </div>
+    <div class="publish-page flex">
+      <div v-show="!isFullScreenPreview" class="rich-editor-section flex-1 basis-1/2">
+        <FroalaEditorCom
+          :tag="'textarea'"
+          :config="config"
+          v-model:value="content"
+        ></FroalaEditorCom>
       </div>
-    </keep-alive>
+      <div
+        v-show="isShowPreview || isFullScreenPreview"
+        class="preview-section flex-1 basis-1/2 border-solid border-gray-300 border rounded"
+        :class="[!isFullScreenPreview ? 'ml-4' : '']"
+      >
+        <PreviewContent :content="content"></PreviewContent>
+      </div>
+    </div>
   </div>
 </template>
 
